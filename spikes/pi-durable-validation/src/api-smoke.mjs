@@ -1,0 +1,17 @@
+import { BACKGROUND_CONTEXT } from '@earendil-works/chord/context';
+import { createModels, fauxProvider, fauxAssistantMessage, fauxText } from '@earendil-works/pi-ai';
+import { Harness, createRegistry } from '@earendil-works/pi-durable';
+import { openNodeSqliteStorage } from '@earendil-works/pi-durable/storage/sqlite/node';
+const path = process.argv[2];
+const faux = fauxProvider();
+const models = createModels();
+models.setProvider(faux.provider);
+faux.setResponses([fauxAssistantMessage([fauxText('hello')])]);
+const storage = await openNodeSqliteStorage(path);
+const harness = await Harness.open(storage, { models, registry: createRegistry() }, BACKGROUND_CONTEXT);
+const root = await harness.root(BACKGROUND_CONTEXT, { agent: { model: { provider: faux.provider.name, modelId: faux.getModel().id } } });
+console.log('MODEL', faux.provider.name, faux.getModel().id);
+const submission = await root.submit({ type: 'input', content: 'hi', requestId: 'r1' }, BACKGROUND_CONTEXT);
+const settled = await submission.wait(BACKGROUND_CONTEXT);
+console.log('SETTLED', JSON.stringify(settled));
+await harness.close(BACKGROUND_CONTEXT);

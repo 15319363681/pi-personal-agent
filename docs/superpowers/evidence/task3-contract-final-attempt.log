@@ -1,0 +1,15 @@
+
+> pi-personal-agent-disposable-spike@0.0.0 test
+> vitest run tests/writer-contract.test.ts tests/single-writer.test.ts
+
+
+ RUN  v4.1.12 D:/Atry/spikes/pi-durable-validation
+
+(node:36612) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  18:11:20
+   Duration  6.39s (transform 78ms, setup 0ms, import 620ms, tests 4.96s, environment 0ms)
+

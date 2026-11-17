@@ -1,0 +1,29 @@
+
+> pi-personal-agent-disposable-spike@0.0.0 test
+> vitest run
+
+
+ RUN  v4.1.12 D:/Atry/spikes/pi-durable-validation
+
+(node:26852) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5476) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35604) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27768) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31824) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34376) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+REPORT=storage_failed:Error: injected_before_commit
+(node:31820) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+REPORT=storage_failed:Error: injected_before_commit
+
+ Test Files  15 passed (15)
+      Tests  40 passed (40)
+   Start at  18:33:52
+   Duration  55.72s (transform 271ms, setup 0ms, import 2.74s, tests 46.74s, environment 1ms)
+

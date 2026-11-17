@@ -1,0 +1,18 @@
+
+> pi-personal-agent-disposable-spike@0.0.0 test
+> vitest run tests/electron-storage.test.ts tests/durable-recovery.test.ts tests/atomic-commit.test.ts
+
+
+ RUN  v4.1.12 D:/Atry/spikes/pi-durable-validation
+
+(node:35624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30684) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+REPORT=storage_failed:Error: injected_before_commit
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Start at  17:43:11
+   Duration  13.35s (transform 77ms, setup 0ms, import 1.03s, tests 11.17s, environment 0ms)
+

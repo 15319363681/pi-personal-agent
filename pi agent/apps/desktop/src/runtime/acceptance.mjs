@@ -1,0 +1,2 @@
+import { access, stat } from 'node:fs/promises';
+export async function acceptArtifact(task, artifactPath) { for(const rule of task.contract.acceptanceCriteria ?? []) { if(rule.type==='artifact_exists') { await access(artifactPath); } } const info=await stat(artifactPath); if(info.size===0) throw Error('acceptance_empty_artifact'); return {artifactPath,size:info.size,criteria:task.contract.acceptanceCriteria ?? []}; }

@@ -1,0 +1,13 @@
+
+> pi-personal-agent-disposable-spike@0.0.0 test
+> vitest run tests/outbound-adapter.test.ts tests/provider-matrix-completeness.test.ts
+
+
+ RUN  v4.1.12 D:/Atry/spikes/pi-durable-validation
+
+
+ Test Files  2 passed (2)
+      Tests  2 passed (2)
+   Start at  18:26:09
+   Duration  1.19s (transform 40ms, setup 0ms, import 134ms, tests 76ms, environment 0ms)
+

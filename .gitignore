@@ -1,0 +1,36 @@
+# Local upstream snapshots and downloaded archives
+/cow agent/
+/cowagent_extract/
+/cowagent-master-extracted/
+/pi agent/packages/
+/pi agent real/
+/pi agent.partial/
+/*.zip
+/*.tgz
+/cow-readme.tmp
+/cow-tree.json
+/pi-readme.tmp
+/pi-tree.json
+/fetch_repo.py
+/reconstruct_maps.py
+
+# Dependencies and generated output
+**/node_modules/
+/pi agent/apps/desktop/dist-ui/
+/pi agent/apps/desktop/src/ui/tray-placeholder.ico
+/spikes/windows-worker/bin/*.exe
+
+# Local databases, runtime state, and credentials
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.env
+*.env.*
+!.env.example
+**/.data/
+
+# Local test artifacts and intermediate evidence
+/docs/superpowers/evidence/*.log
+/docs/superpowers/evidence/*progress.md
+/spikes/pi-durable-validation/tmp-*

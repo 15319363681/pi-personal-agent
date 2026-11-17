@@ -1,0 +1,800 @@
+{
+  "source": "cowagent-master-extracted/CowAgent-master",
+  "sourceSnapshot": "cowagent.zip SHA-256 7ED49EC842B3F322B72FA4A809D1BCF77B378D0E459460E204E65BB3A0B08726",
+  "providers": [
+    {
+      "type": "terminal",
+      "capabilities": {
+        "outboundText": {
+          "status": "local_ui"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "No external provider attachment contract; local terminal behavior requires runtime check."
+        },
+        "authConfiguration": {
+          "status": "none"
+        },
+        "publicCallback": {
+          "status": "no"
+        },
+        "receiptQuery": {
+          "status": "not_applicable"
+        },
+        "idempotency": {
+          "status": "not_applicable"
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "Local interactive loop limits were not assessed because this is not an external notification provider."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "The terminal implementation and packaging were not runtime tested on Windows."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "This is a local UI rather than an account provider, and shutdown behavior was not runtime validated."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 61
+        },
+        {
+          "path": "channel/terminal/terminal_channel.py",
+          "line": 206
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "web",
+      "capabilities": {
+        "outboundText": {
+          "status": "local_ui"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "Web UI attachment behavior not assessed."
+        },
+        "authConfiguration": {
+          "status": "unknown",
+          "reason": "Web authentication depends on deployment configuration and was not assessed in this spike."
+        },
+        "publicCallback": {
+          "status": "no",
+          "reason": "Web is a server UI, not a notification callback provider."
+        },
+        "receiptQuery": {
+          "status": "not_applicable"
+        },
+        "idempotency": {
+          "status": "not_applicable"
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "Web UI request limits were not assessed in this spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "The server runtime dependencies were not verified on Windows in this spike."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "Web session lifecycle was not validated in this spike."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 64
+        },
+        {
+          "path": "channel/web/core/channel.py",
+          "line": 167
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "wechatmp",
+      "capabilities": {
+        "outboundText": {
+          "status": "passive_reply_only"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The README describes media replies, but no proactive notification validation was performed."
+        },
+        "authConfiguration": {
+          "status": "credentials_and_callback_token",
+          "reason": "README lists app id, secret, token and AES key."
+        },
+        "publicCallback": {
+          "status": "required",
+          "reason": "README requires publicly reachable callback or tunnel."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a delivery-query contract."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "No outbound idempotency key established."
+        },
+        "rateLimits": {
+          "status": "limited",
+          "reason": "README documents reply time and media quota constraints."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "Python dependencies and callback deployment not validated on Windows."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "Credential revocation lifecycle not established."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 67
+        },
+        {
+          "path": "channel/wechatmp/wechatmp_channel.py",
+          "line": 168
+        },
+        {
+          "path": "channel/wechatmp/README.md",
+          "line": 3
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "wechatmp_service",
+      "capabilities": {
+        "outboundText": {
+          "status": "unknown",
+          "reason": "Service-account path differs from passive account, but proactive send contract was not verified."
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "Source inspection did not establish this capability; no runtime or provider-account test was authorized."
+        },
+        "authConfiguration": {
+          "status": "credentials_and_callback_token"
+        },
+        "publicCallback": {
+          "status": "required"
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a delivery-query contract."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish an outbound idempotency key contract."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "Provider quotas were not enumerated from the inspected source."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "This capability was not tested in the disposable Windows spike and remains unverified."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 70
+        },
+        {
+          "path": "channel/wechatmp/wechatmp_channel.py",
+          "line": 168
+        },
+        {
+          "path": "channel/wechatmp/README.md",
+          "line": 3
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "wechatcom_app",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "Send method exists; supported outbound file types/limits not enumerated."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "unknown",
+          "reason": "Inbound integration uses callbacks; outbound-only deployment requirements not separated."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not confirm a delivery lookup contract."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not confirm an outbound idempotency contract."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "Provider limit handling not inventoried."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "Python SDK and Windows runtime were not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "Token revocation was not tested without a real provider account."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 73
+        },
+        {
+          "path": "channel/wechatcom/wechatcomapp_channel.py",
+          "line": 106
+        },
+        {
+          "path": "channel/wechatcom/README.md",
+          "line": 1
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "wechat_kf",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not fully inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "required",
+          "reason": "README describes public callback endpoint."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not confirm a delivery lookup contract."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not confirm an outbound idempotency contract."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "Not runtime tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 76
+        },
+        {
+          "path": "channel/wechat_kf/wechat_kf_channel.py",
+          "line": 164
+        },
+        {
+          "path": "channel/wechat_kf/README.md",
+          "line": 1
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "feishu",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "Supported file behavior was not exhaustively tested in the spike."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "optional_mode",
+          "reason": "README supports WebSocket or webhook; webhook needs public reachability."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "Message ID in source does not establish delivery lookup."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "Inbound deduplication is not outbound idempotency."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "Python SDK and Windows runtime were not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 79
+        },
+        {
+          "path": "channel/feishu/feishu_channel.py",
+          "line": 979
+        },
+        {
+          "path": "channel/feishu/README.md",
+          "line": 1
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "dingtalk",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not exhaustively inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "unknown",
+          "reason": "Stream/webhook send and event reception modes not fully separated."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "SDK platform behavior not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 82
+        },
+        {
+          "path": "channel/dingtalk/dingtalk_channel.py",
+          "line": 871
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "wecom_bot",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "Message content types and limits were not exhaustively inspected in the spike."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "unknown",
+          "reason": "Bot webhook send versus inbound event mode not separated."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "This capability was not tested in the disposable Windows spike and remains unverified."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "Credential revocation was not established by source inspection or runtime testing."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 85
+        },
+        {
+          "path": "channel/wecom_bot/wecom_bot_channel.py",
+          "line": 1092
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "qq",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source includes file-send paths, but supported types and limits were not fully enumerated."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "no_public_callback_evidence",
+          "reason": "Source shows websocket client paths; runtime not checked."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "SDK runtime not tested on Windows."
+        },
+        "disconnectRevoke": {
+          "status": "source_close_present",
+          "reason": "Source closes websocket; account credential revoke not established."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 88
+        },
+        {
+          "path": "channel/qq/qq_channel.py",
+          "line": 634
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "telegram",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not exhaustively inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "polling_or_webhook_unknown",
+          "reason": "Inbound mode not assessed."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "Python SDK runtime not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 91
+        },
+        {
+          "path": "channel/telegram/telegram_channel.py",
+          "line": 580
+        }
+      ],
+      "runtimeVerification": {
+        "status": "pass",
+        "scope": "loopback_protocol_only",
+        "evidence": "spikes/pi-durable-validation/tests/outbound-adapter.test.ts; task6-outbound-green.log; controlled HTTP fake only",
+        "limitations": "This validates the Node adapter protocol and failure semantics on Windows; it does not validate the CowAgent Python SDK, Telegram network, account credentials, or real delivery."
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "slack",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not exhaustively inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "unknown",
+          "reason": "Inbound event transport not assessed."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "SDK runtime not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 94
+        },
+        {
+          "path": "channel/slack/slack_channel.py",
+          "line": 448
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "discord",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not exhaustively inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "no_public_callback_evidence",
+          "reason": "Gateway client likely; not runtime verified."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "SDK runtime not tested."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 97
+        },
+        {
+          "path": "channel/discord/discord_channel.py",
+          "line": 442
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    },
+    {
+      "type": "weixin",
+      "capabilities": {
+        "outboundText": {
+          "status": "source_method_present"
+        },
+        "attachments": {
+          "status": "unknown",
+          "reason": "The source inspection did not exhaustively inventory this capability or its limits."
+        },
+        "authConfiguration": {
+          "status": "source_configured"
+        },
+        "publicCallback": {
+          "status": "unknown",
+          "reason": "Inbound and outbound transport requirements not assessed."
+        },
+        "receiptQuery": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "idempotency": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        },
+        "rateLimits": {
+          "status": "unknown",
+          "reason": "The source was not sufficient to inventory this provider limit in the spike."
+        },
+        "windowsRuntime": {
+          "status": "unknown",
+          "reason": "This capability was not tested in the disposable Windows spike and remains unverified."
+        },
+        "disconnectRevoke": {
+          "status": "unknown",
+          "reason": "The inspected source did not establish a stable contract for this capability."
+        }
+      },
+      "sourceEvidence": [
+        {
+          "path": "channel/channel_factory.py",
+          "line": 100
+        },
+        {
+          "path": "channel/weixin/weixin_channel.py",
+          "line": 990
+        }
+      ],
+      "runtimeVerification": {
+        "status": "not_run"
+      },
+      "realDeliveryVerification": {
+        "status": "not_run"
+      }
+    }
+  ],
+  "v1OutboundCandidates": [],
+  "sourceQualifiedCandidates": [
+    "telegram"
+  ]
+}

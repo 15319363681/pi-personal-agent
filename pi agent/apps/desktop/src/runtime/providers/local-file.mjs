@@ -1,0 +1,2 @@
+import { mkdir, writeFile } from 'node:fs/promises'; import { dirname, join } from 'node:path';
+export class LocalFileProvider { async send(event) { if(!event.target) throw Error('missing_target'); const path=join(event.target,`${event.id}.json`); await mkdir(dirname(path),{recursive:true}); await writeFile(path,JSON.stringify({kind:event.kind,payload:event.payload,deliveredAt:Date.now()},null,2)); return {status:'delivered',path,receipt:path}; } }

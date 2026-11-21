@@ -1,18 +1,7 @@
-# Local upstream snapshots and downloaded archives
-/cow agent/
-/cowagent_extract/
+# Local upstream references and downloaded archives
 /cowagent-master-extracted/
 /pi agent/packages/
-/pi agent real/
-/pi agent.partial/
-/*.zip
-/*.tgz
-/cow-readme.tmp
-/cow-tree.json
-/pi-readme.tmp
-/pi-tree.json
-/fetch_repo.py
-/reconstruct_maps.py
+/references/
 
 # Dependencies and generated output
 **/node_modules/

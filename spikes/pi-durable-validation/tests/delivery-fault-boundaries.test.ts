@@ -9,14 +9,15 @@ test('result_fsync_and_rollback_failure_remain_unknown_even_after_old_backup_res
  const dir=await mkdtemp(join(tmpdir(),'pi-fault-fence-'));const path=join(dir,'db.sqlite');let db:any;
  try {
   db=openDeliveryDb(path);const snapshot=join(dir,'backup.sqlite');const journal=join(dir,'journal');
+  db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
   db.exec(`VACUUM INTO '${snapshot.replaceAll("'","''")}'`);
   let syncs=0;const p={calls:0,async send(){this.calls++;return 'accepted';}};
   const io={sync:async(h:any)=>{if(++syncs===2)throw Error('result_fsync_failed');await h.sync();},truncate:async()=>{throw Error('rollback_failed');}};
-  expect(await sendDelivery(db,journal,p,io)).toMatchObject({status:'unknown'});
+  expect(await sendDelivery(db,journal,'delivery-1',p,io)).toMatchObject({status:'unknown'});
   expect(await readFile(journal,'utf8')).toContain('delivered'); // rollback itself was injected to fail
   db.close();db=openDeliveryDb(path);
   expect(db.prepare('SELECT status FROM delivery').get().status).toBe('unknown');
-  await expect(sendDelivery(db,journal,p)).rejects.toThrow();expect(p.calls).toBe(1);
+  await expect(sendDelivery(db,journal,'delivery-1',p)).rejects.toThrow();expect(p.calls).toBe(1);
   restoreBackup(db,snapshot);await reconcile(db,journal);
   expect(db.prepare('SELECT status FROM delivery').get().status).toBe('unknown');
   expect(()=>exitRecoveryMode(db,{userConfirmed:true})).toThrow('unresolved_delivery');
@@ -50,7 +51,7 @@ test('fake_provider_accept_then_process_kill_before_result_journal_never_resends
   db=openDeliveryDb(path);await reconcile(db,join(dir,'journal'));
   expect(db.prepare('SELECT status FROM delivery').get().status).toBe('unknown');
   const p={calls:0,async send(){this.calls++;return 'duplicate';}};
-  await expect(sendDelivery(db,join(dir,'journal'),p)).rejects.toThrow();expect(p.calls).toBe(0);
+  await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).rejects.toThrow();expect(p.calls).toBe(0);
   expect((await readFile(join(dir,'accepted'),'utf8')).trim()).toBe('delivery-1');
  }finally{if(child?.exitCode===null)child.kill();db?.close();await rm(dir,{recursive:true,force:true});}
 });

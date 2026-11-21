@@ -10,13 +10,24 @@
     "start": "electron src/main.mjs"
   },
   "dependencies": {
+    "@earendil-works/pi-agent-core": "1.5.2",
+    "@earendil-works/pi-ai": "1.5.2",
+    "@earendil-works/pi-schema": "1.5.2",
+    "@modelcontextprotocol/client": "^2.4.0",
     "@vitejs/plugin-react": "latest",
+    "@wecom/aibot-node-sdk": "1.0.7",
     "electron": "45.3.3",
+    "koffi": "2.14.1",
+    "mammoth": "1.13.0",
+    "pdfjs-dist": "6.5.438",
     "react": "latest",
     "react-dom": "latest",
+    "sharp": "0.35.5",
     "vite": "latest"
   },
   "devDependencies": {
+    "@modelcontextprotocol/node": "^2.1.2",
+    "@modelcontextprotocol/server": "^2.4.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

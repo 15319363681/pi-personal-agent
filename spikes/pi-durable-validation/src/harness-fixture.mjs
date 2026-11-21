@@ -29,6 +29,12 @@ export async function createHarnessFixture(path, scenario = 'normal', recovering
   };
   const storage = await SqliteStorage.open(facade);
   const fake = fauxProvider();
+  if (options.beforeModelCall) {
+    for (const method of ['stream', 'streamSimple']) {
+      const original = fake.provider[method].bind(fake.provider);
+      fake.provider[method] = (...args) => { options.beforeModelCall(); return original(...args); };
+    }
+  }
   const models = createModels(); models.setProvider(fake.provider);
   const toolCalls = [];
   const boundary = (name) => { process.stdout.write(`BOUNDARY=${name}\n`); return new Promise(() => {}); };

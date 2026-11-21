@@ -46,13 +46,15 @@ export function openDeliveryDb(path) {
   return db;
 }
 
-export async function sendDelivery(db, journalPath, provider, io) {
-  const id = 'delivery-1';
+export async function sendDelivery(db, journalPath, id, provider, io) {
+  if (typeof id !== 'string' || !id.trim()) throw new Error('delivery_id_required');
+  if (db.isTransaction) throw new Error('delivery_intent_must_be_committed');
   guardOperation(db, 'send');
   if(await exists(`${journalPath}.corrupt`)) {freeze(db);throw Error('journal_corrupt');}
   const existing = db.prepare('SELECT status FROM delivery WHERE id=?').get(id)?.status;
-  if (existing && existing !== 'intent') throw new Error('delivery_requires_reconciliation');
-  db.prepare("INSERT OR REPLACE INTO delivery VALUES (?, 'attempting')").run(id);
+  if (existing !== 'intent') throw new Error('delivery_intent_required');
+  const claimed = db.prepare("UPDATE delivery SET status='attempting' WHERE id=? AND status='intent'").run(id);
+  if (claimed.changes !== 1) throw new Error('delivery_intent_required');
   await appendJournalRecord(journalPath, { id, status: 'attempting' }, io);
   // This conservative uncertainty fence is outside database backups. It is
   // persisted before any provider call, and survives result-write/rollback faults.

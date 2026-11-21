@@ -16,10 +16,11 @@ test('pre_send_journal_write_or_fsync_failure_never_calls_provider', async () =>
     const f = await fixture();
     try {
       const provider = { calls: 0, async send() { this.calls++; return 'receipt'; } };
+      f.db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
       const io = fault === 'write'
         ? { open: async () => ({ async stat() { return { size: 0 }; }, async writeFile() { throw new Error('disk write failed'); }, async truncate() {}, async sync() {}, async close() {} }) }
         : { sync: async () => { throw new Error('fsync failed'); } };
-      await expect(sendDelivery(f.db, f.journal, provider, io)).rejects.toThrow();
+      await expect(sendDelivery(f.db, f.journal, 'delivery-1', provider, io)).rejects.toThrow();
       expect(provider.calls).toBe(0);
     } finally { f.db.close(); await rm(f.dir, { recursive: true, force: true }); }
   }
@@ -31,11 +32,12 @@ test('post_send_journal_write_or_fsync_failure_stays_unknown_and_never_retries',
     try {
       let syncs = 0;
       const provider = { calls: 0, async send() { this.calls++; return 'accepted'; } };
+      f.db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
       let writes = 0;
       const io = fault === 'write'
         ? { open: async () => { const h = await import('node:fs/promises').then((m) => m.open(f.journal, 'a')); return { stat: () => h.stat(), truncate: (size: number) => h.truncate(size), writeFile: async (data: string) => { writes++; if (writes === 2) throw new Error('result write failed'); await h.writeFile(data); }, sync: () => h.sync(), close: () => h.close() }; } }
         : { sync: async (h: any) => { syncs++; if (syncs === 2) throw new Error('result fsync failed'); await h.sync(); } };
-      await expect(sendDelivery(f.db, f.journal, provider, io)).resolves.toMatchObject({ status: 'unknown' });
+      await expect(sendDelivery(f.db, f.journal, 'delivery-1', provider, io)).resolves.toMatchObject({ status: 'unknown' });
       expect(provider.calls).toBe(1);
       expect(f.db.prepare('SELECT status FROM delivery').get()?.status).toBe('unknown');
       f.db.close();f.db=openDeliveryDb(f.dbPath);
@@ -45,7 +47,7 @@ test('post_send_journal_write_or_fsync_failure_stays_unknown_and_never_retries',
       await reconcile(f.db, f.journal);
       expect(f.db.prepare('SELECT status FROM delivery').get()?.status).toBe('unknown');
       expect(() => guardOperation(f.db, 'send')).toThrow('recovery_mode');
-      await expect(sendDelivery(f.db, f.journal, provider)).rejects.toThrow('recovery_mode');
+      await expect(sendDelivery(f.db, f.journal, 'delivery-1', provider)).rejects.toThrow('recovery_mode');
       expect(provider.calls).toBe(1);
     } finally { f.db.close(); await rm(f.dir, { recursive: true, force: true }); }
   }

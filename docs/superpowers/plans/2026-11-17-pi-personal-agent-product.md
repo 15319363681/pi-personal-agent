@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-11-17-pi-personal-agent-design.md`
 
+> **状态说明（2026-11-18）：** 下方已勾选任务记录早期 Runtime/MVP 基线，不代表当前产品完成状态。固定本地报告流程不是 Agent 产品本身。已确认的产品方向取代本文原实施顺序及全局 Spike 门槛。后续从 `docs/superpowers/plans/2026-11-18-pi-agent-tools-and-plugin-workflow.md` 继续。
+
 ## Global Constraints
 
 - Windows-first; local-only UI/API in v1; no LAN/public listener.
@@ -18,6 +20,10 @@
 - High-risk send/delete/modify operations require approval scoped to task contract and target.
 - Unknown external delivery results remain `unknown` and block automatic resend.
 - Real model credentials, real channels and deployment remain opt-in integrations; tests use fake providers.
+- Pi Agent is the Agent base; do not build a generic interchangeable-engine platform.
+- The desktop Harness owns authorization, task state, worker isolation, local logs and recovery. Skills, MCP and plugins use only explicit Harness capabilities.
+- Agent-created plugins stay local, run in restricted workers, and require user approval before activation; third-party plugin installs and public markets are out of v1.
+- Spike evidence is scoped to the capability it verifies and is not a global gate for unrelated product slices.
 
 ## Review Focus
 

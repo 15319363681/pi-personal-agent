@@ -9,6 +9,8 @@ export class RpcClient {
     this.nextId = 1;
     this.pending = new Map();
     this.buffer = '';
+    this.exited = false;
+    processLike.on?.('close', () => { this.exited = true; });
     processLike.stdout.on('data', (chunk) => this.#read(String(chunk)));
     processLike.on?.('exit', () => {
       for (const pending of this.pending.values()) pending.reject(new Error('runtime_exited'));
@@ -17,6 +19,7 @@ export class RpcClient {
   }
 
   request(method, params = {}) {
+    if (this.closing || this.exited) return Promise.reject(new Error('runtime_closed'));
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
@@ -24,7 +27,17 @@ export class RpcClient {
     });
   }
 
-  close() { this.process.kill?.(); }
+  close({ timeoutMs = 45_000 } = {}) {
+    if (this.closing) return this.closing;
+    if (this.exited) return Promise.resolve();
+    this.closing = new Promise((resolve) => {
+      const timer = setTimeout(() => this.process.kill(), timeoutMs);
+      this.process.once('close', () => { clearTimeout(timer); resolve(); });
+      // EOF lets runStdio finish its current request and release Worker resources.
+      this.process.stdin.end();
+    });
+    return this.closing;
+  }
 
   #read(chunk) {
     this.buffer += chunk;

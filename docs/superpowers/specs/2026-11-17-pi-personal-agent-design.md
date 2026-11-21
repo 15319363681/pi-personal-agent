@@ -1,8 +1,10 @@
 # Pi Personal Agent Runtime 设计
 
-**状态：** 修订稿，待用户审核  
+**状态：** 历史架构提案，不是当前已批准的实施契约
 **日期：** 2026-11-17  
 **工作名称：** Pi Personal Agent
+
+> 2026-11-18 已确认的产品方向文档优先于本文。本文中关于 Pi Durable、执行内核、任务和 worker 的提案仍需按具体切片验证，不构成开始产品实现前的全局门槛。当前 Pi 对话与受控工作区工具切片以 [`2026-11-18-pi-agent-tools-and-plugin-workflow/design.md`](../plans/2026-11-18-pi-agent-tools-and-plugin-workflow/design.md) 为实施设计。
 
 ## 目标与动机
 
@@ -210,6 +212,6 @@ Langfuse 不作为通知渠道或任务事实来源。模型与通道设置、�
 - [Electron utilityProcess](https://www.electronjs.org/docs/latest/api/utility-process)、[SQLite transactions](https://www.sqlite.org/transactional.html)、[SQLite backup API](https://www.sqlite.org/backup.html)、[SQLite synchronous pragma](https://www.sqlite.org/pragma.html)
 - [Windows Job Objects](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects)、[Windows AppContainer isolation](https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation)、[Pi AI cost/token tracking](https://github.com/earendil-works/pi/blob/main/packages/ai/README.md)、[Langfuse Evaluations](https://langfuse.com/docs/evaluation/overview)
 
-## 后续计划前置条件
+## 后续计划说明
 
-设计批准后，实施计划第一阶段必须先完成可丢弃 Spike 和 provider 能力矩阵。Spike、权限逃逸测试、worker 终止测试或单写入验证任一不通过，都必须先回到设计决策，不进入产品 UI 和功能实现。Spike 通过后，按独立可测的 Runtime、权限/执行 worker、任务验收、outbox/渠道、长期记忆/数据维护、桌面 UI/模型设置、Langfuse 评估等交付切分实施计划；每个交付都需单独测试。
+本节原有“先完成全部 Spike 才进入产品实现”的全局门槛已由 2026-11-18 确认的产品方向取代。未验证的 Pi Durable、Windows worker、Provider 或单写入能力应作为边界明确的工程任务处理；若某项风险阻塞特定能力，应对该能力采用受控降级并继续不依赖它的产品工作。当前实施顺序以 [`2026-11-18-pi-agent-tools-and-plugin-workflow.md`](../plans/2026-11-18-pi-agent-tools-and-plugin-workflow.md) 为准。

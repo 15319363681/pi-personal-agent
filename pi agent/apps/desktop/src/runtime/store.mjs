@@ -20,7 +20,7 @@ export class RuntimeStore {
       CREATE TABLE IF NOT EXISTS settings(id TEXT PRIMARY KEY,provider TEXT,model TEXT,config_json TEXT NOT NULL,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY,value TEXT NOT NULL);`);
     const store = new RuntimeStore(db, path);
-    recoverInterruptedTasks(store);
+    if (store.getMeta('recovery_mode') !== 'true') recoverInterruptedTasks(store);
     return store;
   }
   close() {

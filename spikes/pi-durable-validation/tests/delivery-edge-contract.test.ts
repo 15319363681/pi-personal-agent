@@ -9,11 +9,12 @@ test('restore_really_rolls_back_data_and_reconciliation_reconstructs_journal_onl
   db=openDeliveryDb(join(dir,'db.sqlite')); const backup=join(dir,'backup.sqlite'); const journal=join(dir,'delivery.jsonl');
   db.prepare("INSERT INTO meta VALUES ('snapshot','old')").run(); db.exec(`VACUUM INTO '${backup.replaceAll("'","''")}'`);
   db.prepare("UPDATE meta SET value='new' WHERE key='snapshot'").run();
-  const p={calls:0,async send(){this.calls++;return 'receipt';}}; await sendDelivery(db,journal,p);
+  db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
+  const p={calls:0,async send(){this.calls++;return 'receipt';}}; await sendDelivery(db,journal,'delivery-1',p);
   restoreBackup(db,backup);
   expect(db.prepare("SELECT value FROM meta WHERE key='snapshot'").get().value).toBe('old');
   expect(db.prepare('SELECT * FROM delivery').all()).toHaveLength(0);
-  await expect(sendDelivery(db,journal,p)).rejects.toThrow('recovery_mode'); expect(p.calls).toBe(1);
+  await expect(sendDelivery(db,journal,'delivery-1',p)).rejects.toThrow('recovery_mode'); expect(p.calls).toBe(1);
   await reconcile(db,journal); expect(()=>guardOperation(db,'model')).toThrow('recovery_mode');
   expect(db.prepare('SELECT status FROM delivery').get().status).toBe('delivered');
   expect(()=>exitRecoveryMode(db,{userConfirmed:false})).toThrow(); exitRecoveryMode(db,{userConfirmed:true});
@@ -23,12 +24,29 @@ test('attempting_and_provider_exceptions_never_automatically_resend_across_reope
  const dir=await mkdtemp(join(tmpdir(),'pi-unknown-'));const path=join(dir,'db.sqlite');let db:any;
  try {
   db=openDeliveryDb(path); const p={calls:0,async send(){this.calls++;throw Error('network_response_lost');}};
-  await expect(sendDelivery(db,join(dir,'journal'),p)).resolves.toMatchObject({status:'unknown'});
+  db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
+  await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).resolves.toMatchObject({status:'unknown'});
   db.close();db=openDeliveryDb(path);
   expect(db.prepare('SELECT status FROM delivery').get().status).toBe('unknown');
-  await expect(sendDelivery(db,join(dir,'journal'),p)).rejects.toThrow(); expect(p.calls).toBe(1);
-  db.prepare("UPDATE delivery SET status='attempting'").run(); await expect(sendDelivery(db,join(dir,'journal'),p)).rejects.toThrow();expect(p.calls).toBe(1);
+  await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).rejects.toThrow(); expect(p.calls).toBe(1);
+  db.prepare("UPDATE delivery SET status='attempting'").run(); await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).rejects.toThrow();expect(p.calls).toBe(1);
  } finally {db?.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('delivery_requires_a_unique_committed_intent_before_provider_call', async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'pi-intent-required-'));const db=openDeliveryDb(join(dir,'db.sqlite'));
+ try {
+  const p={calls:0,async send(){this.calls++;return 'receipt';}};
+  await expect(sendDelivery(db,join(dir,'journal'),'missing-delivery',p)).rejects.toThrow('delivery_intent_required');
+  expect(p.calls).toBe(0);
+  db.exec('BEGIN');db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
+  await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).rejects.toThrow('delivery_intent_must_be_committed');
+  expect(p.calls).toBe(0);
+  db.exec('ROLLBACK');
+  db.prepare("INSERT INTO delivery VALUES ('delivery-1','intent')").run();
+  await expect(sendDelivery(db,join(dir,'journal'),'delivery-1',p)).resolves.toMatchObject({status:'delivered'});
+  expect(p.calls).toBe(1);
+ } finally {db.close();await rm(dir,{recursive:true,force:true});}
 });
 test('corrupt_complete_line_or_checksum_cannot_be_a_success_receipt',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'pi-corrupt-journal-'));const path=join(dir,'journal');

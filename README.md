@@ -1,18 +1,21 @@
 # Pi Personal Agent
 
-Windows-first local desktop MVP for turning conversation into approved, resumable tasks. The repository also contains the disposable Spike probes used to validate the runtime and worker boundaries.
+Pi Personal Agent is a Windows 11 desktop Agent for an individual user. The desktop app uses Pi Agent Core and Pi AI for model-driven conversation and provides bounded, read-only tools for a user-selected workspace through the Harness. Local protocol tests and an isolated Electron smoke run verify the current integration. Compatibility with a real model provider and the Windows desktop click-through remain unverified.
 
-This is an early implementation snapshot, not a production-ready agent. Real model calls and external delivery are disabled or unverified. The recorded test results and remaining security limits are documented under `docs/superpowers/evidence/`.
+The repository also contains disposable Spike probes for Runtime, persistence, delivery and worker boundaries. This is an active implementation, not a production-ready product. Current product direction and implementation order are documented under `docs/superpowers/specs/` and `docs/superpowers/plans/`.
 
 ## Contents
 
 - `pi agent/apps/desktop/`: Electron and React local MVP.
+- `pi agent/packages/`: local Pi package source snapshots used for reference and integration work; excluded from Git.
+- `cowagent-master-extracted/CowAgent-master/`: canonical CowAgent reference source used by the capability matrix and design documents; excluded from Git.
 - `spikes/pi-durable-validation/`: Pi Durable, SQLite, recovery, writer ownership, and provider contract probes.
 - `spikes/windows-worker/`: Windows Job Object and AppContainer probes. Build the native probe locally with `build-probe.ps1`.
 - `docs/superpowers/specs/` and `docs/superpowers/plans/`: approved design and implementation plans.
 - `docs/superpowers/evidence/`: final Spike and product reports plus the provider capability matrix.
+- `references/`: local-only duplicate source snapshots, partial clone metadata, downloaded archives, and research helper files; excluded from Git.
 
-The upstream Pi and CowAgent source snapshots, downloaded archives, dependency folders, generated bundles, local databases, and intermediate logs are intentionally excluded.
+Downloaded archives, duplicate or incomplete upstream snapshots, dependency folders, generated bundles, local databases, and intermediate logs are intentionally excluded.
 
 ## Local checks
 
